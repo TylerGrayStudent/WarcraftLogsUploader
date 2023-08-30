@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../css/general.css">
+  <script>
+    const mainWindow = window
+    let lang = mainWindow.lang;
+    let game = mainWindow.game;
+    let storage = mainWindow.storage;
+  </script>
+</head>
+<body onload="if (!game.supportsGear()) document.getElementById('needs-gear').style.display='none'"
+    style="line-height:1.4; font-family: Arial; color:#A0A0A0; height:100vh; display:flex;align-items:center;justify-content:center">
+
+<div style="display:flex;padding:60px; align-items:center">
+<div style="font-size:256px" class="zmdi zmdi-search"></div>
+
+<div>
+    <script>document.write(lang.trans('character_viewer_desc1'))</script>
+    <ul style="list-style:disc"><li><script>document.write(lang.trans('character_viewer_desc2'))</script> </li>
+    <li id="needs-gear"><script>document.write(lang.trans('character_viewer_desc3'))</script>
+    </li>
+<li><script>document.write(lang.trans('character_viewer_desc4'))</script></li>
+</ul>
+</div>
+
+</div>
+
+</body>

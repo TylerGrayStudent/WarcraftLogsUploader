@@ -1,0 +1,537 @@
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    box-sizing: border-box;
+    background-color: black;
+    color: white;
+    border: 1px solid #a0a0a0;
+}
+
+main {
+    display: flex;
+    flex: 1;
+}
+
+#main-and-ad-box {
+    display: flex;
+    align-items: stretch;
+    width: 0;
+    flex: 1
+}
+
+#main {
+    display: flex;
+    align-items: stretch;
+    align-self: stretch;
+    width: 0;
+    flex: 1;
+    flex-direction: column;
+}
+
+#right-sidebar {
+    border-left: 1px solid #555555;
+    display: grid;
+    grid-template: 1fr / 410px;
+    height: calc(100vh - 32px);
+}
+
+.in-game #right-sidebar {
+    height: 100vh;
+}
+
+.show-ad #right-sidebar {
+    grid-template: 1fr 310px / 410px;
+}
+
+#right-sidebar-content {
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+#ad {
+    overflow: hidden;
+    text-align: center;
+    border-top: 1px solid #555555;
+    background-color: black;
+}
+
+#search-bar {
+    border: none !important;
+    border-bottom: 1px solid #555555 !important;
+    display: flex
+}
+
+#searchfield-menu {
+    width: 0;
+    flex: 1
+}
+
+.searchfield-mini-wrapper {
+    margin: 5px;
+    border: 1px solid #606060 !important;
+    color: white;
+    background-color: #404040 !important;
+    color: white;
+    vertical-align: middle;
+    position: relative;
+    z-index: 0;
+    padding-right: 29px;
+}
+
+.searchbutton-mini {
+    vertical-align: center;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    vertical-align: middle;
+    width: 28px;
+    background-color: var(--hover-background-color);
+    border-left: 1px solid #555555;
+}
+
+.searchbutton-mini-image {
+    height: 100%;
+}
+
+.searchfield-mini {
+    width: calc(100% - 9px);
+    height: 30px;
+    margin-top: -3px;
+    border: none !important;
+    background: none !important;
+    margin-right: 0;
+    color: inherit !important
+}
+
+.search-white {
+    color: white;
+    font-size: 22px;
+}
+
+.searchbutton-mini-image {
+    padding-left: 7px;
+    padding-top: 3px;
+}
+
+body, .ui-widget {
+    font-family: Arial, sans-serif !important;
+}
+
+.ui-autocomplete {
+    text-shadow: none;
+    font: inherit;
+    z-index: 100000 !important;
+    background: black !important
+}
+
+.ui-autocomplete * {
+    border: 0 !important;
+}
+
+.ui-menu-item-wrapper:hover, .ui-menu-item-wrapper.ui-state-active {
+    color: var(--hover-foreground-color);
+    background: var(--hover-background-color) !important;
+}
+
+.ui-menu-item-wrapper {
+    font-size: 14px;
+    padding: 3px;
+}
+
+.master-autocomplete-item {
+    display: flex;
+    margin: 3px;
+    align-items: baseline
+}
+
+.master-autocomplete-item .label {
+    width: 45%;
+}
+
+.master-autocomplete-item .server {
+    flex: 1;
+}
+
+.master-autocomplete-item .type {
+    color: #a0a0a0;
+    font-size: 11px;
+    margin-left: 5px;
+}
+
+#character-frame {
+    border: none;
+    flex: 1;
+}
+
+.character-tab {
+    user-select: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    height: 23px;
+    border: 1px solid #555555;
+    padding: 3px 10px;
+    color: white;
+    align-self: center;
+}
+
+.character-tab .icon {
+    font-size: 19px !important;
+    padding-top: 1px !important;
+}
+
+.character-tab.window-controls-group {
+    padding: 3px 0;
+    margin-left: 5px;
+}
+
+#gear-tab, #dungeons-tab {
+    margin-left: -1px;
+    margin-right: 5px
+}
+
+.character-tab.selected {
+    background-color: var(--hover-background-color);
+}
+
+#user-characters {
+    width: 410px
+}
+
+#recent-characters {
+    width: 410px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+#my-characters-contents {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 10px;
+    padding: 5px 10px;
+    overflow: auto;
+    max-height: 200px;
+    scrollbar-width: thin !important;
+    scrollbar-color: var(--thumbBG) var(--scrollbarBG) !important;
+}
+
+#my-characters-contents.compact {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 5px;
+}
+
+#my-characters-caption, #recent-characters-caption, #group-applicants-caption {
+    user-select: none;
+    height: 26px;
+    color: white;
+    margin: 5px;
+    background-color: #303030;
+    border: 1px solid #555555;
+    font-size: 13px;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    padding: 2px;
+}
+
+.my-characters-entry {
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+}
+
+.my-characters-entry:hover, .group-applicants-entry:hover {
+    background: var(--hover-background-color);
+}
+
+.my-characters-thumbnail-image {
+    display: block;
+    border: 1px solid #555555;
+    width: 48px;
+    height: 48px;
+}
+
+.my-characters-name-and-server {
+    width: 0;
+    flex: 1;
+    padding-left: 5px;
+    font-size: 18px;
+}
+
+.my-characters-server, .group-applicants-server {
+    color: #a0a0a0;
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.compact .my-characters-thumbnail-image {
+    display: none;
+}
+
+.compact .my-characters-name-and-server, .compact .group-applicants-name-and-server {
+    font-size: 12px;
+}
+
+.my-characters-name, .group-applicants-character-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#group-applicants-raid-type-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 4px;
+}
+
+#group-applicants-raid-type-options div {
+    justify-content: center;
+}
+
+#group-applicants-sort-options {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-gap: 5px;
+    align-items: center;
+}
+
+.group-applicants-sort-options-choices {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-gap: 4px;
+}
+
+.group-applicants-sort-options-choices > div {
+    justify-content: center;
+}
+
+#group-applicants-contents {
+    display: grid;
+}
+
+.group-applicants-entry {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    padding: 2.5px 5px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.group-applicants-character {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-gap: 5px;
+}
+
+.group-applicants-character-icon {
+    position: relative;
+}
+
+.group-applicants-character-icon img,
+.group-applicants-score-icon img {
+    display: flex;
+    width: 50px;
+    height: 50px;
+    border: 1px solid #555;
+}
+
+.group-applicants-character-icon .badge-label {
+    position: absolute;
+    bottom: 2px;
+    left: 2px;
+    background-color: #2b2b2b;
+    border: 1px solid #555;
+    box-sizing: border-box;
+}
+
+.group-applicants-character-name-and-server {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    align-items: center;
+}
+
+.group-applicants-character-name {
+    display: flex;
+    align-items: center;
+}
+
+.group-applicants-character-name > * {
+    margin: 0 1.5px;
+}
+
+.group-applicants-character-name > *:first-child {
+    margin-left: 0;
+}
+
+.group-applicants-character-name > *:last-child {
+    margin-right: 0;
+}
+
+.group-applicants-role-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.group-applicants-character-server {
+    color: #a0a0a0;
+    display: flex;
+    align-items: center;
+}
+
+.group-applicants-score-zone-and-value {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    align-items: center;
+    text-align: right;
+}
+
+.group-applicants-score-contents {
+    display: none;
+    grid-template-columns: 1fr auto;
+    grid-gap: 5px;
+}
+
+.group-applicants-score-contents.selected {
+    display: grid;
+}
+
+.group-applicants-score-value {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.group-applicants-score-value > * {
+    margin: 0 1.5px;
+}
+
+.group-applicants-score-value > *:first-child {
+    margin-left: 0;
+}
+
+.group-applicants-score-value > *:last-child {
+    margin-right: 0;
+}
+
+.group-applicants-score-value-points {
+    font-weight: bold;
+    color: #D1FA99;
+}
+
+.group-applicants-score-value-spec {
+    color: #a0a0a0;
+}
+
+.group-applicants-character-covenant-icon {
+    width: 24px;
+    height: 24px;
+    border: 1px solid #555;
+    box-sizing: border-box;
+}
+
+.group-applicants-score-icon {
+    position: relative;
+}
+
+.group-applicants-score-progress {
+    position: absolute;
+    left: 1px;
+    right: 1px;
+    bottom: 1px;
+    padding: 2px 0;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+#recent-characters-contents {
+    display: flex;
+    flex-wrap: wrap;
+    overflow: auto;
+    height: 0;
+    flex: 1;
+    align-items: baseline;
+    align-content: flex-start;
+    padding: 5px 10px;
+}
+
+#recent-character {
+    cursor: pointer;
+    padding: 2px 6px;
+    min-width: 20%;
+    width: 20%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#group-applicants {
+    display: none;
+}
+
+#group-applicants-badge {
+    background-color: red;
+    border-radius: 100%;
+    margin-left: 7px;
+    font-weight: bold;
+    width: 20px;
+    height: 19px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#group-applicants-badge-contents {
+    margin-left: -1px;
+}
+
+#group-applicants-settings {
+    margin: 5px;
+    padding: 5px;
+    border: 1px solid #555;
+    display: grid;
+    grid-gap: 4px;
+}
+
+#group-applicants-info {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.group-applicants-info-text {
+    text-align: center;
+}
+
+#group-applicants-info-region-menu-container > ul {
+    position: relative;
+    z-index: 9999;
+    border: none !important;
+    background: none !important;
+}
+
+#group-applicants-info-region-menu-container a {
+    font-size: 15px !important;
+    line-height: normal !important;
+}
+
+#group-applicants-info-region-menu-container ul > div > li {
+    cursor: pointer;
+    border: 1px solid #555555;
+    background-color: black;
+}
+
+#group-applicants-info-region-menu-container ul > div > li > a {
+    padding-right: 30px !important;
+}

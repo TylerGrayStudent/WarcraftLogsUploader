@@ -1,0 +1,46 @@
+@import url('../general.css');
+
+body[version="vanilla"] { --hover-background-color:rgba(40,20,0,0.9);  --hover-foreground-color: white; }
+body[version="classic"] { --hover-background-color:rgba(10,20,0,0.9);  --hover-foreground-color: white; }
+
+.DeathKnight { color: rgb(77%, 12%, 23%) !important; }
+.Druid { color: rgb(100%, 49%, 4%) !important }
+.Hunter { color: rgb(67%, 83%, 45%) !important }
+.Mage { color: rgb(41%, 80%, 94%) !important }
+.Monk { color: #2D9B78 !important }
+.Paladin { color: rgb(96%, 55%, 73%) !important }
+.Priest { color: rgb(100%, 100%, 100%) !important }
+.Rogue { color: rgb(100%, 96%, 41%) !important }
+.Shaman { color: rgb(14%, 35%, 100%) !important }
+.Warlock { color: rgb(58%, 51%, 79%) !important }
+.Warrior { color: rgb(78%, 61%, 43%) !important }
+.DemonHunter { color: #a330c9 !important; }
+
+.DeathKnight-bg { background-color: rgb(77%, 12%, 23%) !important; }
+.Druid-bg { background-color: rgb(100%, 49%, 4%) !important }
+.Hunter-bg { background-color: rgb(62%, 78%, 42%) !important }
+.Mage-bg { background-color: rgb(41%, 80%, 94%) !important }
+.Monk-bg { background-color: #2D9B78 !important }
+.Paladin-bg { background-color: rgb(96%, 55%, 73%) !important }
+.Priest-bg { background-color: rgb(100%, 100%, 100%) !important }
+.Rogue-bg { background-color: rgb(100%, 96%, 41%) !important }
+.Shaman-bg  { background-color: rgb(14%, 35%, 100%) !important }
+.Warlock-bg { background-color: rgb(58%, 51%, 79%) !important }
+.Warrior-bg  { background-color: rgb(78%, 61%, 43%) !important }
+.DemonHunter-bg { background-color: #a330c9 !important; }
+
+.DeathKnight-behind-text { background-color: rgb(57%, 10%, 18%) !important; }
+.Druid-behind-text { background-color: rgb(80%, 39%, 4%) !important }
+.Hunter-behind-text { background-color: rgb(47%, 63%, 25%) !important }
+.Mage-behind-text { background-color: rgb(31%, 60%, 74%) !important }
+.Monk-behind-text { background-color: #2D9B78 !important }
+.Paladin-behind-text { background-color: rgb(76%, 44%, 58%) !important }
+.Priest-behind-text { background-color: rgb(55%, 55%, 55%) !important }
+.Rogue-behind-text { background-color: rgb(50%, 48%, 20%) !important }
+.Shaman-behind-text { background-color: rgb(11%, 28%, 80%) !important }
+.Warlock-behind-text { background-color: rgb(46%, 40%, 63%) !important }
+.Warrior-behind-text { background-color: rgb(62%, 49%, 34%) !important }
+.DemonHunter-behind-text { background-color: #631089 !important; }
+
+.faction-0 { color: rgb(102, 153, 255) !important; }
+.faction-1 { color: rgb(224, 41, 41) !important; }

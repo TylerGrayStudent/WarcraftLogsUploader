@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="./css/warcraft/general.css">
+  <link rel="stylesheet" href="./css/warcraft/main.css">
+  <link rel="stylesheet" href="./css/header.css">
+  <script src="./scripts/constants/lang-en.js"></script>
+ <script>
+    window.jQuery || document.write('<script src="./scripts/3rdparty/jquery.min.js"><\/script>') 
+  </script>
+  <script src="./scripts/3rdparty/jquery.min.js"></script>
+  <script src="./scripts/3rdparty/jquery-ui.min.js"></script>
+  <script src="./scripts/3rdparty/smartmenus.min.js"></script>
+  <script>
+    const mainWindow = window
+  </script>
+</head>
+<body class="hide-ad">
+  <webview id="parser" style="display:none" webpreferences="contextIsolation=no" preload="./parser-ipc.js"></webview>
+  <script>
+    const { BackgroundController } = require("./background-controller")
+    const JSZip = require("./scripts/3rdparty/jszip.min.js")
+    const axios = require("./scripts/3rdparty/axios.min.js")
+    window.JSZip = JSZip
+    window.axios = axios
+    BackgroundController.run();
+    BackgroundController.loadParser();
+  </script>
+
+<!-- BEGIN -->
+<!-- END -->
+
+
+<div id="electron-ad-container" style="display:none; height:100px; position:relative">
+</div>
+
+<div id="update-strip">
+    <div id="update-available">
+        <span id="update-available-text"><script>document.write(lang.trans('update_available'))</script></span> <a href="#" class="update-link" id="update-download"><script>document.write(lang.trans('update_download'))</script></a>
+    </div>
+    <div id="update-downloading">
+        <div id="update-downloading-interior">
+            <div id="update-downloading-text"><script>document.write(lang.trans('downloading_update'))</script></div>  <div id="update-progress" class="progress-bar"><div class="progress-interior"></div></div>
+        </div>
+    </div>
+    <div id="update-downloaded">
+        <span id="update-complete-text"><script>document.write(lang.trans('update_complete'))</script></span> <a href="#" class="update-link" id="update-restart"><script>document.write(lang.trans('update_install'))</script></a>
+    </div>
+</div>
+
+<script src="./init.js">
+</script>
+<script>
+  $(function() {
+    $('#header-bar, #guilds-and-privacy-menu, #versions-container').smartmenus({
+      showOnClick: true,
+      mainMenuSubOffsetX: -1,
+      subMenusSubOffsetX: 10,
+      subMenusSubOffsetY: 0,
+      subMenusMaxWidth: "400px"
+    });
+
+  });
+</script>
+
+</body>
+</html>

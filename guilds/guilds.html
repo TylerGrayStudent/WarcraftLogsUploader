@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../css/warcraft/general.css">
+  <link rel="stylesheet" href="../css/header.css">
+  <link rel="stylesheet" href="../css/guilds.css">
+  <script>
+    window.jQuery || document.write('<script src="../scripts/3rdparty/jquery.min.js"><\/script>') 
+  </script>
+  <script>
+    const { BackgroundController } = require("../background-controller")
+    const JSZip = require("../scripts/3rdparty/jszip.min.js")
+    const axios = require("../scripts/3rdparty/axios.min.js")
+    window.JSZip = JSZip
+    window.axios = axios
+    BackgroundController.run(JSZip);
+  </script>
+  <script>
+    const mainWindow = window
+    let lang = mainWindow.lang;
+    let game = mainWindow.game;
+    let storage = mainWindow.storage;
+  </script>
+  <script src="../scripts/3rdparty/jquery.min.js"></script>
+  <script src="../scripts/3rdparty/jquery-ui.min.js"></script>
+  <script src="../scripts/3rdparty/smartmenus.min.js"></script>  
+</head>
+<body>
+<!-- --------------------------------- Main -------------------------------- -->
+<main>
+  <div id="main-and-ad-box">
+    <div id="main"> 
+      
+<ul id="search-bar" class="sm sm-black">
+  
+  <li id="searchfield-menu">
+    <div id="searchfield-mini-wrapper" class="searchfield-mini-wrapper">
+      <form id="search-form" style="margin:0;width:100%" accept-charset="utf-8" method=get>
+        <input class="searchfield-mini" id="searchfield-mini" name="term" placeholder="Enter a guild name"> 
+        <span class="searchbutton-mini" id="searchbutton-mini">
+          <span class="zmdi zmdi-search search-white searchbutton-mini-image"></span>
+        </span>
+        <div id="autocomplete-mini-results" >
+          
+       </div>
+      </form>
+    </div> 
+  </li>
+</ul>
+
+      <webview src="./blank.html" id="guild-frame"></webview>
+   </div>
+    <div id="right-sidebar">
+      <div id="user-guilds"></div>
+      <div id="ad"></div>
+    </div>
+  </div>
+
+</main>
+<script>
+  const { GuildsController }= require("./guilds-controller")
+  const guildsController = new GuildsController();
+  guildsController.run();
+</script>
+<script>
+  $(function() {
+      $("#searchfield-mini").autocomplete({
+          source: game.origin() + "/search/autocomplete?type=guilds", minLength:2, autoFocus:true, appendTo: "#autocomplete-mini-results", select: function( event, ui ) { window.loadGuild(ui.item.link); }
+        }).autocomplete("instance")._renderItem = function( ul, item ) {
+          var item = $('<div class="master-autocomplete-item"><div class="label ' + item.labelClass + '">' + item.label + '</div><div class="server">' + item.server + '</div><div class="type">' + item.type + '</div></div>');
+          return $("<li>").append(item).appendTo(ul);
+          };
+  });
+</script>
+
+<script>document.body.setAttribute('version', mainWindow.storage.version())</script>
+       
+</body>
+</html>

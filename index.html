@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="./css/warcraft/general.css">
+  <link rel="stylesheet" href="./css/warcraft/main.css">
+  <link rel="stylesheet" href="./css/header.css">
+  <script src="./scripts/constants/lang-en.js"></script>
+ <script>
+    window.jQuery || document.write('<script src="./scripts/3rdparty/jquery.min.js"><\/script>') 
+  </script>
+  <script src="./scripts/3rdparty/jquery.min.js"></script>
+  <script src="./scripts/3rdparty/jquery-ui.min.js"></script>
+  <script src="./scripts/3rdparty/smartmenus.min.js"></script>
+  <script>
+    const mainWindow = window
+  </script>
+</head>
+<body class="hide-ad">
+  <webview id="parser" style="display:none" webpreferences="contextIsolation=no" preload="./parser-ipc.js"></webview>
+  <script>
+    const { BackgroundController } = require("./background-controller")
+    const JSZip = require("./scripts/3rdparty/jszip.min.js")
+    const axios = require("./scripts/3rdparty/axios.min.js")
+    window.JSZip = JSZip
+    window.axios = axios
+    BackgroundController.run();
+    BackgroundController.loadParser();
+  </script>
+
+ 
+<div id="background"></div>
+
+<div id="title-bar">
+  <div id="logo-font" style="flex-direction: column;justify-content: center;">
+    <div id="logo-container">
+      <img id="logoimage">
+
+      <span id="title-if-text"></span>
+    </div>
+  </div>
+  <div id="header-controls-container">
+    <div>
+      <ul id="versions-container" class="sm sm-black" style="display: none">
+        <li id="version-menu" class="right bar-item">
+          <a id="version-link">
+            <script>
+                document.write(lang.trans(mainWindow.game.versions()[mainWindow.storage.version()]))
+            </script>
+          </a>
+          <ul>
+            <script>
+                for (var i in mainWindow.game.versions()) {
+                    document.write(`
+                    <li>
+                      <a href="#" id="version-${i}" versionid="${i}" ${mainWindow.storage.version() == i ? "selected" : ""}>${lang.trans(mainWindow.game.versions()[i])}</a>
+                    </li>
+                  `);
+                }
+            </script>
+          </ul>
+        </li>
+      </ul>
+
+      <ul id="header-bar" class="sm sm-black">
+        <li id="language-menu" class="right bar-item">
+          <a id="language-link">
+            <script>document.write(game.locales()[lang.language()])</script>
+          </a>
+          <ul class="levels" id="language-submenu">
+            <script>
+                for (var i in mainWindow.game.locales()) {
+                    if (mainWindow.lang.language() == i)
+                        selectedLanguage = i
+                    document.write(' <li><a href="#" id="language-' + i + '" ' + (mainWindow.lang.language() == i ? 'selected="true"' : '') + ' languageid="' + i + '">' + mainWindow.game.locales()[i] + '</a></li>')
+                }
+            </script>
+          </ul>
+        </li>
+
+        <li class="right"><a id="logout-link" class=" bar-item" style="display:none" href="">
+          <script>document.write(lang.trans('logout'))</script>
+        </a></li>
+
+        <li class="right"><a id="settings-link" class=" bar-item" href="#">
+          <script>document.write(lang.trans('settings'))</script>
+        </a></li>
+
+        <li class="right"><a id="help-link" class=" bar-item" href="#">
+          <script>document.write(lang.trans('help'))</script>
+        </a></li>
+
+        <li class="right"><a id="home-link" class=" bar-item" href="#">
+          <script>document.write(lang.trans('home'))</script>
+        </a></li>
+      </ul>
+    </div>
+    <div id="app-version" style="display: none">
+      <script>
+        const appVersions = ['desktop', 'ingame'];
+        for (const version of appVersions) {
+            const selected = version === (mainWindow.storage.getStoredItem('appVersion') || 'ingame');
+            document.write(`
+              <span
+                class="app-version-tab"
+                ${selected ? 'selected="true"' : ''}
+                appversion="${version}"
+              >
+               ${lang.trans(version)}
+              </span>
+            `);
+        }
+      </script>
+    </div>
+  </div>
+</div>
+
+
+<div id="nav-bar" style="display: none">
+  <div id="livelog-link" class="nav-bar-tab">
+    <script>document.write(lang.trans('livelog_button'))</script>
+  </div>
+  <div id="uploadlog-link" class="nav-bar-tab">
+    <script>document.write(lang.trans('upload_button'))</script>
+  </div>
+  <div id="splitlog-link" class="nav-bar-tab">
+    <script>document.write(lang.trans('splitlog_button'))</script>
+  </div>
+  <div id="reports-link" class="nav-bar-tab">
+    <script>document.write(lang.trans('reports'))</script>
+  </div>
+  <div id="characters-link" class="nav-bar-tab">
+    <div class="tab-badge" id="characters-tab-badge" style="display: none"></div>
+    <script>document.write(lang.trans('characters'))</script>
+  </div>
+  <div id="guilds-link" class="nav-bar-tab">
+    <script>document.write(lang.trans('guilds'))</script>
+  </div>
+
+</div>
+<!-- --------------------------------- Main -------------------------------- -->
+<main>
+  <div id="first-launch-page">
+    <p>
+      <script>
+        if(window.overwolf) {
+            if (mainWindow?.game?.prefix() == 'warcraft') {
+                document.write(lang.trans('welcome_to_wcl'));
+            } else {
+                document.write(lang.trans('welcome_to_ffl'));
+            }
+        }
+      </script>
+    </p>
+    <p><script>document.write(lang.trans('companion_app_features'))</script></p>
+    <p>
+      <script>
+          if(window.overwolf) {
+              if (mainWindow?.game?.prefix() == 'warcraft') {
+                  document.write(lang.trans('reopen_wcl_companion_instructions'));
+              } else {
+                  document.write(lang.trans('reopen_ffl_companion_instructions'));
+              }
+          }
+      </script>
+    </p>
+    <div style="margin: 20px">
+      <img id="game-logo" width=80 height=80 style="margin-right:5px" src="../../icons/icon.png">
+    </div>
+    <div>
+      <button class="big-button wide" id="explore-app-btn"><script>document.write(lang.trans('explore_the_app'))</script></button>
+      <button class="big-button wide" style="display: none" id="return-to-game-btn"><script>document.write(lang.trans('return_to_game'))</script></button>
+    </div>
+  </div>
+  <div id="container">
+    <div id="startup-panel">
+      <img id="button-spinny" src="https://assets.rpglogs.com/img/spinny.gif">
+    </div>
+    <div id="tabcontent" class="tab-grid">
+      <div id="logincontent" style="display:none">
+
+
+        <form method="POST" accept-charset="UTF-8" id="login-form">
+          <table cellspacing=10 class="dialog-table">
+            <tr style="vertical-align:middle">
+              <td style="text-align:right">
+                <label for="email">
+                  <script>document.write(lang.trans('email'))</script>
+                </label>
+              <td><input class="login-field" type="text" name="email" id="email">
+            <tr style="vertical-align:middle">
+              <td style="text-align:right"><label for="password">
+                <script>document.write(lang.trans('password'))</script>
+              </label>
+              <td><input class="login-field" type="password" name="password" id="password">
+            <tr>
+              <td></td>
+              <td>
+                <button id="login-button" class="big-button right" type="submit">
+                  <script>document.write(lang.trans('login'))</script>
+                </button>
+
+          </table>
+        </form>
+
+        <div id="account-links">
+          <a href="#" id="forgot-password-link" target="_blank">
+            <script>document.write(lang.trans('forgot_password'))</script>
+          </a>
+          <a href="#" id="register-link" target="_blank">
+            <script>document.write(lang.trans('create_account'))</script>
+          </a>
+        </div>
+
+      </div>
+      <div id="mainview" style="display: none">
+
+        <!-- Logs tab -->
+        <div id="reportcontent" class="tab-grid" style="display:none">
+
+          <div id="report-upload-page" style="">
+
+            <div id="upload-container" class="tab-grid">
+              <div id="file-chooser-description" style="display:none">
+                <script>document.write(lang.trans('choose_file_for_upload'))</script>
+              </div>
+              <div id="split-file-chooser-description" style="display:none">
+                <script>document.write(lang.trans('choose_file_for_split'))</script>
+              </div>
+              <div id="file-chooser-row" style="display:none">
+                <div class="directory-file" id="file-chooser"><span id="logfile" style="display:none"></span><span
+                  id="logfile-display"></span>
+                  <button class="directory-button big-button right">
+                    <script>document.write(lang.trans('choose_button'))</script>
+                  </button>
+                </div>
+              </div>
+              <div id="directory-chooser-description" style="display:none"><span
+                id="live-log-descriptive-text"></span>
+
+                <script>
+                    document.write(lang.trans("choose_livelog_directory_" + game.prefix()))
+                </script>
+                </span>
+              </div>
+              <div id="directory-chooser-row">
+                <div id="directory-chooser" class="directory-file">
+                    <span id="directory" style="display:none"></span>
+                    <span id="directory-display"></span>
+                  <button class="directory-button big-button right">
+                    <script>document.write(lang.trans('choose_button'))</script>
+                  </button>
+                </div>
+              </div>
+              <div id="guild-chooser-description">
+                <script>document.write(lang.trans('choose_guild'))</script>
+              </div>
+
+              <ul id="guilds-and-privacy-menu" class="sm sm-black">
+                <div id="guilds-teams-and-regions-container"></div>
+                <li id="privacy-container">
+                  <a><span id="privacy-selection-text"></span></a>
+                  <ul id="privacy-contents">
+                    <li>
+                      <a id="privacy-0" class="privacy-option" data-id="0"><script>document.write(lang.trans('public_report'))</script></a>
+                    </li>
+                    <li>
+                      <a id="privacy-1" class="privacy-option" data-id="1"><script>document.write(lang.trans('private_report'))</script></a>
+                    </li>
+                    <li>
+                      <a id="privacy-2" class="privacy-option" data-id="2"><script>document.write(lang.trans('unlisted_report'))</script></a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+
+              <div id="description-container">
+                <div id="description-label" style="white-space:nowrap">
+                  <script>document.write(lang.trans('description_report_label'))</script>
+                </div>
+                <input style="flex:1; width:0" type="text" id="description" name="description">
+
+              </div>
+
+              <div id="controls-container">
+                <div id="fight-chooser-container" class="left" style="vertical-align:middle;display:none"><input type=checkbox
+                                                                                                     id="fight-chooser">
+                  <label for="fight-chooser"></label> <label for="fight-chooser">
+                    <script>document.write(lang.trans('select_specific_raids'))</script>
+                  </label>
+                </div>
+                <div style="display:flex">
+                  <div id="livelog-entirefile-container" style="display:none; vertical-align:middle; margin-right:30px">
+                    <input
+                      type=checkbox id="livelog-entirefile-chooser"> <label for="livelog-entirefile-chooser"></label>
+                    <label
+                      for="livelog-entirefile-chooser">
+                      <script>document.write(lang.trans('livelog_entirefile'))</script>
+                    </label>
+                  </div>
+                  <div id="livelog-realtime-container" style="display:none; vertical-align:middle;">
+                  <input
+                    type=checkbox id="livelog-realtime-chooser"> <label for="livelog-realtime-chooser"></label>
+                  <label
+                    for="livelog-realtime-chooser">
+                    <script>document.write(lang.trans('livelog_realtime'))</script>
+                  </label>
+                  </div>
+                </div>
+                <button id="upload-button" class="big-button right">
+                  <script>document.write(lang.trans('go_button'))</script>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div id="report-progress-page" style="display:none; padding:10px">
+
+            <div id="logfile-progress-container" style="display: none;">
+              <div style="margin:8px 0">
+                <span id="logfile-progress-status"><script>document.write(lang.trans('processing_log_file'))</script></span>
+                <span id="logfile-progress-number"></span>...
+              </div>
+              <div id="logfile-progress" class="progress-bar"><div class="progress-interior"></div></div>
+            </div>
+
+            <p id="livelog-progress-status" style="display:none">
+
+            </p>
+
+            <div id="upload-progress-container" style="visibility:hidden">
+              <div style="margin:8px 0"><span id="upload-progress-status"><script>document.write(lang.trans('uploading_fights'))</script></span>
+                <span id="upload-progress-number"></span>...
+              </div>
+              <div id="upload-progress" class="progress-bar"><div class="progress-interior"></div></div>
+            </div>
+
+            <p style="text-align:center">
+              <button id="cancelbutton" class="big-button" style="display:none" type=button>
+                <script>document.write(lang.trans('cancel_button'))</script>
+              </button>
+              <button class="big-button wide" style="display:none" id="viewlivelogbutton">
+                <script>document.write(lang.trans('view_report_button'))</script>
+              </button>
+              <button class="big-button wide" style="display:none" id="viewliveloginappbutton">
+                <script>document.write(lang.trans('view_report_in_app_button'))</script>
+              </button>
+              <button class="big-button wide" style="display:none" id="endlivelogbutton">
+                <script>document.write(lang.trans('stop_button'))</script>
+              </button>
+            </p>
+          </div>
+
+          <div id="report-deletion-archival-page" style="display:none; padding:10px">
+            <div id="report-deletion-archival-container">
+              <div>
+                <div style="margin-bottom:1em"><span id="view-report-description"><script>document.write(lang.trans('view_report_desc'))</script></span>
+                </div>
+                <p style="text-align:center" id="view-report-container">
+                  <button type=button id="viewlogbutton" class="big-button wide">
+                    <script>document.write(lang.trans('view_report_button'))</script>
+                  </button>
+                  <button class="big-button wide" id="viewloginappbutton">
+                    <script>document.write(lang.trans('view_report_in_app_button'))</script>
+                  </button>
+                </p>
+                <div id="deletion-archival-ui">
+
+                  <div id="deletion-archival-ui-options">
+                    <div id="deletion-archival-ui-options-description">
+                      <script>document.write(lang.trans('delete_or_archive_desc'))</script>
+                    </div>
+                    <p style="text-align:center">
+                      <button style="min-width:250px" type=button id="deletelogbutton">
+                        <script>document.write(lang.trans('delete_log_button'))</script>
+                      </button>
+                      <button style="min-width:250px" type=button id="archivelogbutton">
+                        <script>document.write(lang.trans('archive_log_button'))</script>
+                      </button>
+                    </p>
+                  </div>
+
+                  <div id="deletion-archival-ui-deletion-options">
+                    <div>
+                      <script>document.write(lang.trans('confirm_deletion'))</script>
+                    </div>
+                    <p style="text-align:center">
+                      <button style="min-width:250px" type=button id="confirm-deletion-button">
+                        <script>document.write(lang.trans('yes'))</script>
+                      </button>
+                      <button style="min-width:250px" type=button id="cancel-deletion-button">
+                        <script>document.write(lang.trans('no'))</script>
+                      </button>
+                    </p>
+                  </div>
+
+                  <div id="deletion-archival-ui-archival-options">
+                    <div>
+                      <script>document.write(lang.trans('confirm_archival'))</script>
+                    </div>
+                    <p style="text-align:center">
+                      <button style="min-width:250px" type=button id="confirm-archival-button">
+                        <script>document.write(lang.trans('yes'))</script>
+                      </button>
+                      <button style="min-width:250px" type=button id="cancel-archival-button">
+                        <script>document.write(lang.trans('no'))</script>
+                      </button>
+                    </p>
+                  </div>
+
+                  <div id="deletion-archival-ui-deletion-success-message">
+                    <script>document.write(lang.trans('deletion_success'))</script>
+                  </div>
+                  <div id="deletion-archival-ui-archival-success-message">
+                    <script>document.write(lang.trans('archival_success'))</script>
+                  </div>
+
+
+                </div>
+                <p style="text-align:center">
+                  <button type=button id="donebutton" class="big-button wide">
+                    <script>document.write(lang.trans('done_button'))</script>
+                  </button>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div id="report-fights-page" style="display:none; padding:10px; position:relative;height:255px">
+            <select id="fights-list" size=10 multiple></select>
+            <div id="fight-details">
+              <script>document.write(lang.trans('fight_details'))</script>
+            </div>
+
+
+            <div id="include-trash-container" class="left" style="vertical-align:middle;"><input type=checkbox
+                                                                                                 id="include-trash">
+              <label for="include-trash"></label> <label for="include-trash">
+                <script>document.write(lang.trans('include_trash_fights'))</script>
+              </label></div>
+
+            <button id="fights-button" class="big-button right">
+              <script>document.write(lang.trans('go_button'))</script>
+            </button>
+          </div>
+        </div>
+
+        <!-- REPORTS TAB CONTENT -->
+        <!-- CHARACTERS TAB CONTENT -->
+        <!-- GUILDS TAB CONTENT -->
+      </div>
+      <div id="sidebar" style="display: none">
+        <div id="logs-sidebar" style="display: none">Logs</div>
+        <!-- REPORTS TAB SIDEBAR -->
+        <!-- CHARACTERS TAB SIDEBAR -->
+        <!-- GUILDS TAB SIDEBAR -->
+      </div>
+      <div id="sidebar-ad"></div>
+    </div>
+
+    <div class="ui-widget" style="font-size:12px; padding:0; display:none" id="errorblock">
+      <div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
+        <div style="margin:5px 0"><span class="ui-icon ui-icon-alert"
+                                        style="float: left; margin-right: .3em;"></span>
+          <strong>
+            <script>document.write(lang.trans('error_label'))</script>
+          </strong> <span id="errortext"></span></div>
+      </div>
+    </div>
+
+    <div class="ui-widget" style="font-size:12px; padding:0; display:none" id="warningblock">
+      <div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
+        <div style="margin:5px 0"><span class="ui-icon ui-icon-alert"
+                                        style="float: left; margin-right: .3em;"></span>
+          <strong>
+            <script>document.write(lang.trans('warning_label'))</script>
+          </strong> <span id="warningtext"></span></div>
+      </div>
+    </div>
+
+    <iframe style="display:none" id="fights"></iframe>
+
+    <script>document.body.setAttribute('version', mainWindow.storage.version())</script>
+
+  </div>
+
+</main>
+
+<!-- REPORTS TAB SCRIPTS -->
+<!-- CHARACTERS TAB SCRIPTS -->
+<!-- GUILDS TAB SCRIPTS -->
+ 
+
+
+<div id="electron-ad-container" style="display:none; height:100px; position:relative">
+</div>
+
+<div id="update-strip">
+    <div id="update-available">
+        <span id="update-available-text"><script>document.write(lang.trans('update_available'))</script></span> <a href="#" class="update-link" id="update-download"><script>document.write(lang.trans('update_download'))</script></a>
+    </div>
+    <div id="update-downloading">
+        <div id="update-downloading-interior">
+            <div id="update-downloading-text"><script>document.write(lang.trans('downloading_update'))</script></div>  <div id="update-progress" class="progress-bar"><div class="progress-interior"></div></div>
+        </div>
+    </div>
+    <div id="update-downloaded">
+        <span id="update-complete-text"><script>document.write(lang.trans('update_complete'))</script></span> <a href="#" class="update-link" id="update-restart"><script>document.write(lang.trans('update_install'))</script></a>
+    </div>
+</div>
+
+<script src="./init.js">
+</script>
+<script>
+  $(function() {
+    $('#header-bar, #guilds-and-privacy-menu, #versions-container').smartmenus({
+      showOnClick: true,
+      mainMenuSubOffsetX: -1,
+      subMenusSubOffsetX: 10,
+      subMenusSubOffsetY: 0,
+      subMenusMaxWidth: "400px"
+    });
+
+  });
+</script>
+
+</body>
+</html>

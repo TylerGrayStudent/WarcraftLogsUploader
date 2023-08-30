@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../css/warcraft/general.css">
+  <link rel="stylesheet" href="../css/header.css">
+  <link rel="stylesheet" href="../css/characters.css">
+  <script>
+    window.jQuery || document.write('<script src="../scripts/3rdparty/jquery.min.js"><\/script>') 
+  </script>
+  <script>
+    const { BackgroundController } = require("../background-controller")
+    const JSZip = require("../scripts/3rdparty/jszip.min.js")
+    const axios = require("../scripts/3rdparty/axios.min.js")
+    window.JSZip = JSZip
+    window.axios = axios
+    BackgroundController.run(JSZip);
+  </script>
+  <script>
+    const mainWindow = window
+    let lang = mainWindow.lang;
+    let game = mainWindow.game;
+    let storage = mainWindow.storage;
+  </script>
+  <script src="../scripts/3rdparty/jquery.min.js"></script>
+  <script src="../scripts/3rdparty/jquery-ui.min.js"></script>
+  <script src="../scripts/3rdparty/smartmenus.min.js"></script>  
+</head>
+<body>
+<!-- --------------------------------- Main -------------------------------- -->
+<main>
+  
+ 
+
+  <div id="main-and-ad-box">
+    <div id="main"> 
+      
+<ul id="search-bar" class="sm sm-black">
+  
+  <li id="searchfield-menu">
+    <div id="searchfield-mini-wrapper" class="searchfield-mini-wrapper">
+      <form id="search-form" style="margin:0;width:100%" accept-charset="utf-8" method=get>
+        <input class="searchfield-mini" id="searchfield-mini" name="term" placeholder="Enter a character name"> 
+        <span class="searchbutton-mini" id="searchbutton-mini">
+          <span class="zmdi zmdi-search search-white searchbutton-mini-image"></span>
+        </span>
+        <div id="autocomplete-mini-results" >
+       </div>
+      </form>
+    </div> 
+  </li>
+
+  <div class="character-tab" id="raids-tab" style="display:none"><script>document.write(lang.trans('raids'))</script></div>
+  <div class="character-tab" id="dungeons-tab" style="display:none"><script>document.write(lang.trans('mythic_plus_dungeons'))</script></div>
+  <div class="character-tab" id="rankings-tab" style="display:none"><script>document.write(lang.trans('rankings'))</script></div>
+  <div class="character-tab" id="gear-tab" style="display:none"><script>document.write(lang.trans('gear'))</script></div>
+
+</ul>
+      <webview src="./blank.html" id="character-frame"></webview>
+   </div>
+    <div id="right-sidebar">
+      <div id="user-characters"></div>
+      <div id="recent-characters"><div id="recent-characters-caption"><script>document.write(lang.trans('recent_characters'))</script></div>
+        <div id="recent-characters-contents"></div>
+      </div>
+      <div id="ad"></div>
+    </div>
+  </div>
+
+</main>
+<script>
+  const { CharactersController }= require("./characters-controller")
+  const charactersController = new CharactersController();
+  charactersController.run();
+</script>
+<script>
+  $(function() {
+      $("#searchfield-mini").autocomplete({
+          source: game.origin() + "/search/autocomplete?type=characters", minLength:2, autoFocus:true, appendTo: "#autocomplete-mini-results", select: function( event, ui ) { window.loadCharacter(ui.item.link); }
+        }).autocomplete("instance")._renderItem = function( ul, item ) {
+          var item = $('<div id="' + item.characterID + '" class="master-autocomplete-item"><div class="label ' + item.labelClass + '">' + item.label + '</div><div class="server">' + item.server + '</div><div class="type">' + item.type + '</div></div>');
+          return $("<li>").append(item).appendTo(ul);
+          };
+  })
+</script>
+
+<script>document.body.setAttribute('version', mainWindow.storage.version())</script>
+       
+</body>
+</html>
